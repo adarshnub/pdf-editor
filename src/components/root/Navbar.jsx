@@ -32,16 +32,19 @@ const Navbar = () => {
   const username = user?.username;
 
   return (
-    <div className="sticky top-0 w-full flex justify-between py-6 ">
-      <h1 className="font-extrabold text-[18px]">LOGO</h1>
-      <ul className="flex gap-4">
+    <div className="sticky top-0 w-full flex justify-between py-6 bg-[#0e7490] px-4 md:px-10">
+      <h1 className="font-extrabold md:text-[18px] cursor-pointer">PDF EDITOR</h1>
+      <ul className="flex gap-4 text-[16px] md:text-[18px]">
         {username && (
           <>
             <li>
              <h1>{user.username}</h1>
             </li>
             <li>
-              <button onClick={Logout}>Logout</button>
+               <button onClick={Logout}
+               className="rounded-lg bg-[#6dacbd] px-2 py-1 font-semibold hover:bg-[#4d6870] hover:text-white" >
+                Logout
+               </button>
             </li>
           </>
         )}

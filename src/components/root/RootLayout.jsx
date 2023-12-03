@@ -6,7 +6,7 @@ import Footer from './Footer'
 
 const RootLayout = () => {
   return (
-    <div className='w-full px-10'>
+    <div className='w-full '>
       <Navbar />
       <section className='flex flex-1 h-full'>
         <Outlet />
