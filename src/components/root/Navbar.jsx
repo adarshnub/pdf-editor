@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import UserContext from "../../context/UserContext";
 
 const Navbar = () => {
-  const [username, setUsername] = useState(null);
+  // const [username, setUsername] = useState(null);
+
+  const { setUser, user } = useContext(UserContext);
 
 
   useEffect(() => {
@@ -10,7 +13,8 @@ const Navbar = () => {
       credentials: "include",
     }).then((response) => {
         response.json().then(userInfo => {
-        setUsername(userInfo.username);
+        
+        setUser(userInfo)
         // console.log(username,"user   namme")
         })
       });
@@ -22,20 +26,22 @@ const Navbar = () => {
         credentials: 'include',
         method: 'POST',
     })
-    setUsername(null);
+    setUser(null);
   }
 
+  const username = user?.username;
+
   return (
-    <div className="sticky top-0 w-full flex justify-between ">
+    <div className="sticky top-0 w-full flex justify-between py-6 ">
       <h1 className="font-extrabold text-[18px]">LOGO</h1>
       <ul className="flex gap-4">
         {username && (
           <>
             <li>
-              <button onClick={Logout}>Logout</button>
+             <h1>{user.username}</h1>
             </li>
             <li>
-             {/* <h1>{userInfo.username}</h1> */}
+              <button onClick={Logout}>Logout</button>
             </li>
           </>
         )}

@@ -7,10 +7,14 @@ import RegisterForm from "./components/auth/RegisterForm";
 import RootLayout from "./components/root/RootLayout";
 import Home from "./components/root/Home";
 
+
+
 function App() {
   
 
   return (
+  
+
   <main className="flex h-screen">
     <Routes>
       <Route element={<AuthLayout />}>
@@ -23,6 +27,8 @@ function App() {
       </Route>
     </Routes>
   </main>
+  
+  
   )
 }
 
