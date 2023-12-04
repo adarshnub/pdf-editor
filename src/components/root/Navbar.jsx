@@ -32,7 +32,7 @@ const Navbar = () => {
   const username = user?.username;
 
   return (
-    <div className="sticky top-0 w-full flex justify-between py-6 bg-[#0e7490] px-4 md:px-10">
+    <div className="sticky top-0 w-full flex justify-between py-6 shadow-xl bg-[#c5aee8] px-4 md:px-10 opacity-90">
       <h1 className="font-extrabold md:text-[18px] cursor-pointer">PDF EDITOR</h1>
       <ul className="flex gap-4 text-[16px] md:text-[18px]">
         {username && (
@@ -42,9 +42,10 @@ const Navbar = () => {
             </li>
             <li>
                <button onClick={Logout}
-               className="rounded-lg bg-[#6dacbd] px-2 py-1 font-semibold hover:bg-[#4d6870] hover:text-white" >
+               type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" >
                 Logout
                </button>
+               
             </li>
           </>
         )}
@@ -52,10 +53,16 @@ const Navbar = () => {
         {!username && (
           <>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/login"
+               class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+              >Login
+              </Link>
             </li>
             <li>
-              <Link to="/register">Register</Link>
+              <Link to="/register"
+               class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                Register
+                </Link>
             </li>
           </>
         )}
