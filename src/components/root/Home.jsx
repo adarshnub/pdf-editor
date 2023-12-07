@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import FileUploader from "./FileUploader";
 import axios from "axios";
+import PdfContext from "../../context/PdfContext";
+import UserContext from "../../context/UserContext";
+import { IoMdClose } from "react-icons/io";
+import ExtractPages from "./ExtractPages";
+
 
 const Home = () => {
   const [UploadFilename, setUploadFileName] = useState("");
-  const [selectedOption, setSelectedOption] = useState("");
+  // const [selectedOption, setSelectedOption] = useState("");
   const initialValues = {
     file: "",
     fileName: "",
@@ -14,8 +20,12 @@ const Home = () => {
   const [response, setResponse] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState({});
 
-  const [pdfs, setPdfs] = useState([]);
+  // const [pdfs, setPdfs] = useState([]);
+
+  const { setUserPdfs, userPdfs } = useContext(PdfContext);
+  const { setUser, user } = useContext(UserContext);
 
   const handleFile = (file) => {
     setUploadFileName(file.name);
@@ -54,18 +64,17 @@ const Home = () => {
     console.log("Form Data:", formData);
 
     try {
-      // const formDataToSend = { ...formData };
-
-      // console.log("response data ", formDataToSend);
-
+      setIsLoading(true);
       const response = await axios.post(
         "http://localhost:3001/upload",
-        formData
+        formData,
+        { withCredentials: true }
       );
 
       //response handling
       if (response.status === 200) {
         setResponse(response.data);
+        fetchPdfs();
 
         console.log("Form submitted successfully");
       } else {
@@ -76,60 +85,113 @@ const Home = () => {
       if (error.response) {
         console.error("server responded :", error);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const fetchPdfs = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/allpdfs");
-      setPdfs(response.data);
+      const response = await axios.get("http://localhost:3001/allpdfs", {
+        withCredentials: true,
+      });
+      // setPdfs(response.data);
+      setUserPdfs(response.data);
     } catch (error) {
       console.error("Error fetching PDFs:", error);
     }
   };
 
   useEffect(() => {
+    
     fetchPdfs();
-  }, [handleSubmit]);
+  }, []);
+
+  //handle-pdf-delete
+  const handleDelete = async (pdfId) => {
+    try {
+      setIsDeleting((loading) => ({...loading,[pdfId]:true}));
+      await axios.delete(`http://localhost:3001/pdf/${pdfId}`,
+      {withCredentials:true,}
+      );
+      fetchPdfs();
+    } catch (error) {
+      console.error("error delting pdf",error);
+    } finally {
+      setIsDeleting((loading) => ({...loading, [pdfId] : false}));
+    } 
+  }
+
+  const username = user?.username;
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full min-h-[34rem]">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-[16px]">
-        <div className="flex flex-col">
-          <label className="font-[500] text-[14px] text-[#333333]">
-            Upload PDF
-          </label>
-          <div className="flex gap-1 md:gap-4 border rounded-[8px] border-gray-400 w-full ">
-            <label className=" border-gray-400 rounded-[8px] px-3 text-[14px] bg-gray-100 text-gray-500 py-[12px] w-4/5">
-              {UploadFilename ? <p> {UploadFilename}</p> : ""}
-            </label>
-            <FileUploader
-              handleFile={handleFile}
-              removeFile={removeFile}
-              className=""
-            />
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className={`bg-[#9747FF] px-[28px] py-[16px] text-[10.9px] md:text-[14px] font-[700] text-white  rounded-[8px] mt-4
-                  ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            {isLoading ? "Submitting..." : "Apply"}
-          </button>
-        </div>
-      </form>
+    <>
+    <div className="flex flex-col items-center justify-center w-full h-full min-h-screen">
+      {username ? (
+        <div className="flex flex-col items-center justify-center w-full h-full min-h-[34rem]">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-[16px]">
+            <div className="flex flex-col mt-14 md:mt-20">
+              <label className="font-[500] text-[14px] text-[#333333]">
+                Upload PDF
+              </label>
+              <div className="flex gap-1 md:gap-4 border rounded-[8px] border-gray-400 bg-gray-200 w-full ">
+                <label className=" border-gray-400 rounded-[8px] px-3 text-[14px] bg-gray-200 text-gray-500 py-[12px] w-4/5 min-w-[8rem]">
+                  {UploadFilename ? <p> {UploadFilename}</p> : ""}
+                </label>
+                <FileUploader
+                  handleFile={handleFile}
+                  removeFile={removeFile}
+                  className=""
+                />
+              </div>
+            </div>
+            <div className=" place-self-center">
+              <button
+                type="submit"
+                className={`bg-[#9747FF] px-[28px] py-[16px] text-[10.9px] md:text-[14px] font-[700] text-white  rounded-[8px] mt-4
+                `}
+              >
+                {isLoading ? "Saving...." : "Save PDF"}
+              </button>
+            </div>
+          </form>
 
-      <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2">All PDFs</h2>
-        <ul>
-          {pdfs.map((pdf) => (
-            <li key={pdf._id}>{pdf.fileName}</li>
-          ))}
-        </ul>
-      </div>
+          {userPdfs && (
+            <>
+              <div className="mt-4 w-3/4">
+                <h2 className="text-lg font-bold mb-2">All Saved PDF Documents</h2>
+                <ul className="flex flex-col gap-4 3xl:gap-12">
+                  {userPdfs.map((pdf) => (
+                    <div key={pdf._id}
+                    className="flex justify-between ">
+                      <li>{pdf.fileName}</li>
+                      {/* <div>{pdf.fileData}</div> */}
+                      <button
+                        onClick={() => handleDelete(pdf._id)}
+                        className="flex justify-around font-[500] md:w-[120px] text-[12px] md:text-[14px] rounded-[8px] p-[8px] gap-[4px] border-2 border-[#FF0000] text-[#FF0000] items-center cursor-pointer hover:text-white hover:bg-red-500"
+                      >
+                        {isDeleting[pdf._id] ? "Deleting..." :
+                          <>
+                           <IoMdClose />
+                        <span>Delete</span>
+                          </>
+                        }
+                      </button>
+                    </div>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
+        </div>
+      ) : (
+        <Link to="/login" className="underline">
+          Login to continue
+        </Link>
+      )}
+    <ExtractPages />
     </div>
+    </>
   );
 };
 

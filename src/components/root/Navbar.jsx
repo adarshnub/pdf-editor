@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../context/UserContext";
+import PdfContext from "../../context/PdfContext";
 
 const Navbar = () => {
   // const [username, setUsername] = useState(null);
 
   const { setUser, user } = useContext(UserContext);
+  const { setUserPdfs } = useContext(PdfContext);
 
 
   useEffect(() => {
@@ -27,6 +29,7 @@ const Navbar = () => {
         method: 'POST',
     })
     setUser(null);
+    setUserPdfs([]);
   }
 
   const username = user?.username;

@@ -49,6 +49,7 @@ const FileUploader = ({ handleFile, removeFile }) => {
         onChange={handleChange}
         ref={hiddenFileInput}
         style={{ display: "none" }}
+        className="w-full"
         
       />
     </>
