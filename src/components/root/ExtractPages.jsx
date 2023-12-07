@@ -30,7 +30,7 @@ const ExtractPages = () => {
         }
     }
 
-    //handle pdf -Download using blob object
+    //handle pdf -Download 
     const handleDownload = () => {
 
         
