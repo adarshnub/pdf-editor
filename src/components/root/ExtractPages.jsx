@@ -44,13 +44,14 @@ const ExtractPages = () => {
   };
 
   return (
-    <div className="w-3/4 flex flex-col gap-5 mt-20 mb-20">
+    <div className="w-full  flex flex-col gap-5 mt-20 mb-20">
       <h2 className="text-xl font-extrabold self-center mt-12">Extract Pages from PDF</h2>
       <div>
-        <label className="flex justify-between font-extrabold items-center">
+        <label className="flex font-bold justify-center">
           Select PDF:
+          </label>
           <select 
-          className="font-bold px-4 py-2"
+          className="font-semibold px-2 py-2 text-center flex mx-auto"
           value={pdfId} 
           onChange={(e) => setPdfId(e.target.value)}>
             <option 
@@ -66,15 +67,15 @@ const ExtractPages = () => {
               </option>
             ))}
           </select>
-        </label>
+      
       </div>
-      <div className="flex justify-between">
-        <label className="font-semi-bold">
+      <div className="flex flex-col px-4 items-center justify-center">
+        <label className="font-semibold self-center text-sm  md:text-lg">
           Enter Page Numbers (comma-separated):
         </label>
           <input
             placeholder="eg : 1,3,4"
-            className="bg-gray-200 font-semibold px-4 py-1 text-center"
+            className="bg-gray-200 font-semibold px-1 py-1 text-center w-[16rem]"
             type="text"
             value={selectedPages}
             onChange={(e) => setSelectedPages(e.target.value)}
@@ -82,7 +83,7 @@ const ExtractPages = () => {
       </div>
       
         <button 
-        className="bg-[#9747FF] text-white font-bold px-7 py-2 rounded-xl hover:bg-red-400 lg:w-1/4 lg:place-self-end"
+        className="bg-[#9747FF] text-white font-bold px-7 py-2 rounded-xl hover:bg-red-400  self-center  "
         onClick={handleExtractPages}>Extract Pages</button>
       
       {extractedPdf && (

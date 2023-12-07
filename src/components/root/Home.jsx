@@ -21,6 +21,7 @@ const Home = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState({});
+  const [selectedPdf, setSelectedPdf] = useState(null);
 
   // const [pdfs, setPdfs] = useState([]);
 
@@ -107,6 +108,7 @@ const Home = () => {
     fetchPdfs();
   }, []);
 
+
   //handle-pdf-delete
   const handleDelete = async (pdfId) => {
     try {
@@ -120,6 +122,22 @@ const Home = () => {
     } finally {
       setIsDeleting((loading) => ({...loading, [pdfId] : false}));
     } 
+  }
+
+  //view pdf
+  const handleViewPdf = async (pdfId) => {
+    try{
+      const response = await axios.get(`http://localhost:3001/pdf/${pdfId}`,{
+        withCredentials:true,
+       
+      });
+
+      const base64String = response.data;
+      setSelectedPdf(base64String);
+      
+    }catch(error) {
+      console.error("Error fetching PDF:", error);
+    }
   }
 
   const username = user?.username;
@@ -165,7 +183,10 @@ const Home = () => {
                     <div key={pdf._id}
                     className="flex justify-between ">
                       <li
-                      className="font-bold"
+                      className="font-bold cursor-pointer text-blue-500"
+                      onClick={() => {
+                        handleViewPdf(pdf._id); 
+                      }}
                       >{pdf.fileName}</li>
                       {/* <div>{pdf.fileData}</div> */}
                       <button
@@ -183,9 +204,33 @@ const Home = () => {
                   ))}
                 </ul>
               </div>
+              {selectedPdf && (
+              <div className="mt-4 mb-10  w-full">
+                <embed
+                  src={`data:application/pdf;base64,${selectedPdf}`}
+                  type="application/pdf"
+                  // width="500rem"
+                  // height="600px"
+                  className="mx-auto w-full px-2 sm:w-[500px] md:w-[700px] lg:w-[900px] h-[575px] md:h-[960px] lg:h-[840px] overflow-hidden"
+                />
+              </div>
+            )} 
               <ExtractPages />
+                
             </>
           )}
+
+{/* {selectedPdf && (
+              <div className="mt-4 mb-10">
+                <embed
+                  src={`data:application/pdf;base64,${selectedPdf}`}
+                  type="application/pdf"
+                  width="500rem"
+                  height="600px"
+                />
+              </div>
+            )}            */}
+
         </div>
       ) : (
         <Link to="/login" className="underline">
