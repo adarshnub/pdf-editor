@@ -148,7 +148,7 @@ const Home = () => {
             <div className=" place-self-center">
               <button
                 type="submit"
-                className={`bg-[#9747FF] px-[28px] py-[16px] text-[10.9px] md:text-[14px] font-[700] text-white  rounded-[8px] mt-4
+                className={`bg-[#9747FF] px-[28px] py-[16px] text-[10.9px] md:text-[14px] font-[700] text-white  rounded-[8px] mt-4 hover:bg-red-400
                 `}
               >
                 {isLoading ? "Saving...." : "Save PDF"}
@@ -158,13 +158,15 @@ const Home = () => {
 
           {userPdfs && (
             <>
-              <div className="mt-4 w-3/4">
-                <h2 className="text-lg font-bold mb-2">All Saved PDF Documents</h2>
-                <ul className="flex flex-col gap-4 3xl:gap-12">
+              <div className="mt-24 w-3/4 flex flex-col">
+                <h2 className=" text-xl font-extrabold self-center">All Saved PDF Documents</h2>
+                <ul className="flex flex-col gap-4 3xl:gap-12 mt-8">
                   {userPdfs.map((pdf) => (
                     <div key={pdf._id}
                     className="flex justify-between ">
-                      <li>{pdf.fileName}</li>
+                      <li
+                      className="font-bold"
+                      >{pdf.fileName}</li>
                       {/* <div>{pdf.fileData}</div> */}
                       <button
                         onClick={() => handleDelete(pdf._id)}
@@ -181,6 +183,7 @@ const Home = () => {
                   ))}
                 </ul>
               </div>
+              <ExtractPages />
             </>
           )}
         </div>
@@ -189,7 +192,7 @@ const Home = () => {
           Login to continue
         </Link>
       )}
-    <ExtractPages />
+    {/* <ExtractPages /> */}
     </div>
     </>
   );
