@@ -7,7 +7,7 @@ const ExtractPages = () => {
     const [pdfId, setPdfId] = useState('');
     const[selectedPages, setSelectedPages] = useState('');
     const [extractedPdf, setExtractedPdf] = useState("");
-    const {userPdfs} = useContext(PdfContext);
+    const {userPdfs,setUserPdfs} = useContext(PdfContext);
 
     const handleExtractPages = async () => {
         try{
@@ -18,6 +18,7 @@ const ExtractPages = () => {
 
             if (response.status ===200) {
                 setExtractedPdf(response.data);
+                // setUserPdfs(response.data);
                 console.log("pages extracted successfully");
             }else {
                 console.error('error while extracting pages',error);            }
@@ -31,13 +32,12 @@ const ExtractPages = () => {
 
     //handle pdf -Download using blob object
     const handleDownload = () => {
-        const blob = new Blob([Buffer.from(extractedPdf,'base64')],{
-            type: 'application/pdf',
-        })
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'extracted.pdf';
-        link.click();
+
+        
+          const link = document.createElement("a");
+          link.href = `data:application/pdf;base64,${extractedPdf}`;
+          link.download = "extracted.pdf";
+          link.click();
     }
 
   return (
@@ -81,4 +81,4 @@ const ExtractPages = () => {
   )
 }
 
-export default ExtractPages
+export default ExtractPages;
