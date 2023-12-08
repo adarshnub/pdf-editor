@@ -11,7 +11,7 @@ const Navbar = () => {
 
 
   useEffect(() => {
-    fetch("http://localhost:3001/check-auth", {
+    fetch("https://pdf-editor-bcknd.onrender.com/check-auth", {
       credentials: "include",
     }).then((response) => {
         response.json().then(userInfo => {
@@ -24,7 +24,7 @@ const Navbar = () => {
 
 
   function Logout() {
-    fetch('http://localhost:3001/logout',{
+    fetch('https://pdf-editor-bcknd.onrender.com/logout',{
         credentials: 'include',
         method: 'POST',
     })

@@ -10,7 +10,7 @@ export default function RegisterFormm() {
     ev.preventDefault();
     console.log(username, email, password);
 
-    const response = await fetch("http://localhost:3001/register", {
+    const response = await fetch("https://pdf-editor-bcknd.onrender.com/register", {
       method: "POST",
       body: JSON.stringify({ username, email, password }),
       headers: { "Content-Type": "application/json" },
