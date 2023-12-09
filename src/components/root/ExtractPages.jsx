@@ -7,10 +7,13 @@ const ExtractPages = () => {
   const [pdfId, setPdfId] = useState("");
   const [selectedPages, setSelectedPages] = useState("");
   const [extractedPdf, setExtractedPdf] = useState("");
-  const { userPdfs, setUserPdfs } = useContext(PdfContext);
+  const [loadingExtractPages, setLoadingExtractPages] = useState(false);
+  const [loadingDownload, setLoadingDownload] = useState(false);
+  const { userPdfs, setUserPdfs, fetchPdfs } = useContext(PdfContext);
 
   const handleExtractPages = async () => {
     try {
+        setLoadingExtractPages(true);
       const response = await axios.post(
         "https://pdf-editor-bcknd.onrender.com/extract-pages",
         {
@@ -21,8 +24,9 @@ const ExtractPages = () => {
       );
 
       if (response.status === 200) {
+        fetchPdfs();
         setExtractedPdf(response.data);
-        // setUserPdfs(response.data);
+      
         console.log("pages extracted successfully");
       } else {
         console.error("error while extracting pages", error);
@@ -32,15 +36,19 @@ const ExtractPages = () => {
       if (error.response) {
         console.error("Server responded with error:", error.response.data);
       }
+    } finally {
+        setLoadingExtractPages(false);
     }
   };
 
   //handle pdf -Download
   const handleDownload = () => {
+    setLoadingDownload(true);
     const link = document.createElement("a");
     link.href = `data:application/pdf;base64,${extractedPdf}`;
     link.download = "extracted.pdf";
     link.click();
+    setLoadingDownload(false);
   };
 
   return (
@@ -84,15 +92,15 @@ const ExtractPages = () => {
       
         <button 
         className="bg-[#9747FF] text-white font-bold px-7 py-2 rounded-xl hover:bg-red-400  self-center  "
-        onClick={handleExtractPages}>Extract Pages</button>
+        onClick={handleExtractPages}>
+           {loadingExtractPages ? ' Extracting...' : ' Extract Pages'}
+        </button>
       
       {extractedPdf && (
-        
-          
-          <button 
+        <button 
           className="bg-[#9747FF] text-white font-bold  py-2 rounded-xl hover:bg-red-400 w-[15rem]  place-self-center "
           onClick={handleDownload}>
-            Download Extracted PDF
+            {loadingDownload ? 'Downloading...' : 'Download Extracted PDF'}
           </button>
         
       )}

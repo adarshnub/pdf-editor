@@ -22,9 +22,9 @@ const Home = () => {
   const [isDeleting, setIsDeleting] = useState({});
   const [selectedPdf, setSelectedPdf] = useState(null);
 
-  // const [pdfs, setPdfs] = useState([]);
+  
 
-  const { setUserPdfs, userPdfs } = useContext(PdfContext);
+  const { setUserPdfs, userPdfs, fetchPdfs } = useContext(PdfContext);
   const { setUser, user } = useContext(UserContext);
 
   const handleFile = (file) => {
@@ -90,20 +90,7 @@ const Home = () => {
     }
   };
 
-  const fetchPdfs = async () => {
-    try {
-      const response = await axios.get(
-        "https://pdf-editor-bcknd.onrender.com/allpdfs",
-        {
-          withCredentials: true,
-        }
-      );
-      // setPdfs(response.data);
-      setUserPdfs(response.data);
-    } catch (error) {
-      console.error("Error fetching PDFs:", error);
-    }
-  };
+
 
   useEffect(() => {
     fetchPdfs();
