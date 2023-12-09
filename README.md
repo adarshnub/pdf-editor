@@ -1,8 +1,16 @@
-# React + Vite
+# PDF-EDITOR WEBSITE
+# React + Vite + Tailwindcss + Mongoodb +Express + Nodejs 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Deployed Live on Vercel:
+
+- (https://pdf-editor-qx780bxx9-adarshnub.vercel.app)
+- to use. create an account first , then login to explore the features
+
+# features
+- user authentication (jwt verification)
+- Upload pdf to cloud (user can save their pdf's)
+- View any pdf in the website
+- Extract pages: selected the pages you want to extarct
+- Download the extracted pdf from cloud 
