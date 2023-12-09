@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 
 export default function RegisterFormm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   async function register(ev) {
     ev.preventDefault();
@@ -16,12 +17,16 @@ export default function RegisterFormm() {
       headers: { "Content-Type": "application/json" },
     });
     if (response.status === 200) {
+      setRedirect(true);
       alert("Sign Up successfull");
     } else {
       alert("Sign Up failer . Try again");
     }
   }
 
+  if (redirect) {
+    return <Navigate to={"/login"} />;
+  }
   return (
     <form
       onSubmit={register}
