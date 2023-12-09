@@ -14,8 +14,16 @@ const FileUploader = ({ handleFile, removeFile }) => {
 
   const handleChange = (event) => {
     const fileUploaded = event.target.files[0];
-    setShowUpload(false);
-    handleFile(fileUploaded);
+
+    if(fileUploaded && fileUploaded.type === "application/pdf") {
+      setShowUpload(false);
+      handleFile(fileUploaded);
+    }else {
+      alert('Please select a valid PDF file.');
+      hiddenFileInput.current.value = null;
+    }
+    // setShowUpload(false);
+    // handleFile(fileUploaded);
   };
 
   const handleRemove = () => {
@@ -50,7 +58,7 @@ const FileUploader = ({ handleFile, removeFile }) => {
         ref={hiddenFileInput}
         style={{ display: "none" }}
         className="w-full"
-        
+        accept="application/pdf"
       />
     </>
   );
