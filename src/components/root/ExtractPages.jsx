@@ -90,7 +90,7 @@ const ExtractPages = () => {
         
           
           <button 
-          className="bg-[#9747FF] text-white font-bold px-7 py-2 rounded-xl hover:bg-red-400 lg:w-1/4 lg:place-self-end"
+          className="bg-[#9747FF] text-white font-bold  py-2 rounded-xl hover:bg-red-400 w-[15rem]  place-self-center "
           onClick={handleDownload}>
             Download Extracted PDF
           </button>
