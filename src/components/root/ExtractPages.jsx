@@ -12,7 +12,7 @@ const ExtractPages = () => {
   const handleExtractPages = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/extract-pages",
+        "https://pdf-editor-bcknd.onrender.com/extract-pages",
         {
           pdfId,
           selectedPages: selectedPages.split(",").map((page) => parseInt(page)),
