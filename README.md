@@ -5,7 +5,7 @@
 
 Deployed Live on Vercel:
 
-- (https://pdf-editor-qx780bxx9-adarshnub.vercel.app)
+- (https://pdf-editor-edbu26agr-adarshnub.vercel.app/)
 - to use. create an account first , then login to explore the features
 
 # features
