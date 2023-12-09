@@ -61,7 +61,11 @@ const Home = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
+    if(!formData.file) {
+      alert('Please select a PDF file to save');
+      return;
+    }
 
     try {
       setIsLoading(true);
