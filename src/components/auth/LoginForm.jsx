@@ -5,10 +5,24 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(ev) {
     ev.preventDefault();
 
+
+    if (!email.trim() || !password.trim()) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
     // console.log(email, password);
 
     try {
@@ -19,7 +33,7 @@ export default function LoginForm() {
         credentials: "include",
       });
       if (response.ok) {
-        alert("Login successfull");
+        // alert("Login successfull");
         setRedirect(true);
       } else {
         console.error("Error during login", error);
@@ -27,7 +41,9 @@ export default function LoginForm() {
       }
     } catch (error) {
       console.error("Error during login", error);
-      alert("An error occurred during login. Please try again.");
+      alert("Wrong credentials. Please try again.");
+    }finally {
+      setLoading(false); 
     }
   }
 
@@ -63,9 +79,10 @@ export default function LoginForm() {
 
       <button
         className="bg-black text-white px-4 py-2 rounded-xl w-full font-bold text-sm hover:text-black hover:bg-gray-400"
-        type="onSubmit"
+        type="submit"
+        disabled={loading}
       >
-        Login
+        {loading ? "Logging in..." : "Login"}
       </button>
       <div className="flex gap-2">
         <p className="text-sm">Create a new account</p>

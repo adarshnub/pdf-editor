@@ -6,21 +6,85 @@ export default function RegisterFormm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+
+  const isValidEmail = (value) => {
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  };
+
+  const isValidPassword = (value) => {
+    
+    return value.length >= 8;
+   
+  };
+
+  const isValidUsername = (value) => {
+   
+    return value.trim() !== "";
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    if (!isValidUsername(username)) {
+      setUsernameError("Please enter a valid username.");
+      isValid = false;
+    } else {
+      setUsernameError("");
+    }
+
+    if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!isValidPassword(password)) {
+      setPasswordError("Please enter a valid password (at least 8 characters).");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+    return isValid;
+  };
 
   async function register(ev) {
     ev.preventDefault();
-    console.log(username, email, password);
+    // console.log(username, email, password);
 
-    const response = await fetch("https://pdf-editor-bcknd.onrender.com/register", {
-      method: "POST",
-      body: JSON.stringify({ username, email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (response.status === 200) {
-      setRedirect(true);
-      alert("Sign Up successfull");
-    } else {
-      alert("Sign Up failer . Try again");
+    if (!validateForm()) {
+      alert("Please enter valid information in all fields.");
+      return;
+    }
+
+
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://pdf-editor-bcknd.onrender.com/register", {
+        method: "POST",
+        body: JSON.stringify({ username, email, password }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.status === 200) {
+        setRedirect(true);
+        alert("Sign Up successful");
+      } else {
+        alert("Sign Up failed. Try again");
+      }
+    } catch (error) {
+      console.error("Error during registration", error);
+      alert("An error occurred during registration. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -43,6 +107,7 @@ export default function RegisterFormm() {
         value={username}
         onChange={(ev) => setUsername(ev.target.value)}
       />
+      {usernameError && <p className="text-red-500 text-xs">{usernameError}</p>}
 
       <input
         className="px-3 py-1 rounded-lg text-sm w-full"
@@ -51,6 +116,7 @@ export default function RegisterFormm() {
         value={email}
         onChange={(ev) => setEmail(ev.target.value)}
       />
+      {emailError && <p className="text-red-500 text-xs">{emailError}</p>}
 
       <input
         className="px-3 py-1 rounded-lg text-sm w-full"
@@ -59,12 +125,14 @@ export default function RegisterFormm() {
         value={password}
         onChange={(ev) => setPassword(ev.target.value)}
       />
+      {passwordError && <p className="text-red-500 text-xs">{passwordError}</p>}
 
       <button
         className="bg-black text-white px-4 py-1 rounded-xl w-full font-bold text-sm hover:text-black hover:bg-gray-400"
-        type="onSubmit"
+        type="submit"
+        disabled={loading}      
       >
-        Sign Up
+        {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
       <div className="flex gap-2">
